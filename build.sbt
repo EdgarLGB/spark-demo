@@ -20,7 +20,9 @@ resolvers ++= Seq(
 )
 
 libraryDependencies ++= Seq(
-  "org.apache.spark" %% "spark-core" % sparkVersion exclude("jline", "2.12")
+  "org.apache.spark" %% "spark-core" % sparkVersion exclude("jline", "2.12"),
+  "org.apache.spark" %% "spark-sql" % "2.2.1",
+  "org.scalaj" %% "scalaj-http" % "2.3.0"
 )
 
 publishTo := {
