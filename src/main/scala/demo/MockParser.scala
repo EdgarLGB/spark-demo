@@ -7,6 +7,9 @@ import org.apache.spark.{SparkConf, SparkContext}
 
 import scala.util.matching.Regex
 
+/**
+  * A parser to convert data to json format
+  */
 object MockParser {
 
   def main(args: Array[String]): Unit = {
@@ -21,13 +24,12 @@ object MockParser {
       .builder()
       .appName(sc.appName)
       .getOrCreate()
-    val split_df: DataFrame = parse(spark, log_file)
+    val split_df = parse(spark, log_file)
     
     split_df.write.json(outputPath)
   }
 
   def parse(spark: SparkSession, rdd: RDD[(String, String)]) = {
-    
     // regular expression patterns
     val reg_ex_host =
       """^([^\s]+\s)""".r
