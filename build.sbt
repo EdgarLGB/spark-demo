@@ -20,9 +20,11 @@ resolvers ++= Seq(
 )
 
 libraryDependencies ++= Seq(
-  "org.apache.spark" %% "spark-core" % sparkVersion exclude("jline", "2.12"),
-  "org.apache.spark" %% "spark-sql" % "2.2.1",
-  "org.scalaj" %% "scalaj-http" % "2.3.0"
+  "org.apache.spark" %% "spark-core" % sparkVersion % "provided" exclude("jline", "2.12"),
+  "org.apache.spark" %% "spark-sql" % "2.2.1" % "provided",
+  //"org.scalaj" %% "scalaj-http" % "2.3.0",
+  "org.elasticsearch" %% "elasticsearch-spark-20" % "6.2.3"
+
 )
 
 publishTo := {
@@ -34,3 +36,13 @@ publishTo := {
 }
 
 credentials += Credentials(Path.userHome / ".ivy2" / ".credentials")
+
+import sbtassembly.MergeStrategy
+// Fix the duplicate problem
+assemblyMergeStrategy in assembly := {
+  case PathList("org", "apache", xs@_*) => MergeStrategy.last
+  case PathList("com", "google", xs@_*) => MergeStrategy.last
+  case x =>
+    val oldStrategy = (assemblyMergeStrategy in assembly).value
+    oldStrategy(x)
+}

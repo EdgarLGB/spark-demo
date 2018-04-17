@@ -1,26 +1,25 @@
 package demo
 
 import org.apache.spark.{SparkConf, SparkContext}
-
-import scalaj.http.Http
+import org.elasticsearch.spark.rdd.EsSpark
 
 /**
-  * Created by bobo on 16/04/18.
+  * Write json to ES
   */
 object MockWriter {
 
   def main(args: Array[String]): Unit = {
-    val inputDirPath = "/home/bobo/Downloads/output"
-    val esURL = "http://34.240.106.68:9200"
-    val indexName = "index1"
-    val typeName = "type1"
-    val conf = new SparkConf().setMaster("local").setAppName("Writer1")
-    val spark = new SparkContext(conf)
-    val inputRDDs = spark.wholeTextFiles(inputDirPath)
+    val inputDirPath = args(0)
+    val esURL = args(1)
+    val indexName = args(2)
+    val typeName = args(3)
+    val conf = new SparkConf()
+    conf.set("es.index.auto.create", "true")
+      .set("es.nodes", esURL)
+    val sc = new SparkContext(conf)
+    val inputRDDs = sc.wholeTextFiles(inputDirPath)
 
-    val req = Http(esURL + "/" + indexName + "/" + typeName).method("POST").header("Content-Type", "application/json")
-    inputRDDs.map(_._2).flatMap(_.split("\n")).foreach(s => {
-      req.postData(s).asString
-    })
+    val resultRDD = inputRDDs.map(_._2).flatMap(_.split("\n"))
+    EsSpark.saveJsonToEs(resultRDD, indexName + "/" + typeName)
   }
 }
