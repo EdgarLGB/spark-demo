@@ -13,6 +13,8 @@ object MockWriter {
     val esURL = args(1)
     val indexName = args(2)
     val typeName = args(3)
+    printf("inputPath: %s \n esURL: %s \n indexName: %s \n typeName: %s ", inputDirPath, esURL, indexName, typeName)
+
     val conf = new SparkConf()
     conf.set("es.index.auto.create", "true")
       .set("es.nodes", esURL)

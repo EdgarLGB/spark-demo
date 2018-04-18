@@ -15,6 +15,8 @@ object MockCollector {
     val inputDirPath = args(0)
     val outputFilePath = args(1)
     val errorFilePath = args(2)
+    printf("inputPath: %s \n outputPath: %s \n errorPath: %s \n", inputDirPath, outputFilePath, errorFilePath)
+
     val conf = new SparkConf()
     val spark = new SparkContext(conf)
     val inputRDDs = spark.wholeTextFiles(inputDirPath)
@@ -25,9 +27,7 @@ object MockCollector {
 
     // send back the invalid data
     val invalidRDD = flatRDD.filter(!_.matches(regex))
-    if (!flatRDD.isEmpty()) {
-      invalidRDD.coalesce(1).saveAsTextFile(errorFilePath + "/invalid-" + UUID.randomUUID().toString)
-    }
+    invalidRDD.coalesce(1).saveAsTextFile(errorFilePath + "/invalid-" + UUID.randomUUID().toString)
   }
 
 }

@@ -17,6 +17,8 @@ object MockAnalyser {
     val sc = new SparkContext(conf)
     val inputRDDs = sc.wholeTextFiles(inputDirPath)
 
+    printf("inputPath: %s \n outputPath: %s \n occurrence: %d ", inputDirPath, outputPath, occurrence)
+
     val spark = SparkSession
       .builder()
       .appName(sc.appName)

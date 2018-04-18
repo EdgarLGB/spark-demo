@@ -16,6 +16,8 @@ object MockParser {
 
     val inputPath = args(0)
     val outputPath = args(1)
+    printf("inputPath: %s \n outputPath: %s \n", inputPath, outputPath)
+
     val conf = new SparkConf()
     val sc = new SparkContext(conf)
 
@@ -25,7 +27,7 @@ object MockParser {
       .appName(sc.appName)
       .getOrCreate()
     val split_df = parse(spark, log_file)
-    
+
     split_df.write.json(outputPath)
   }
 
@@ -37,7 +39,7 @@ object MockParser {
     val reg_ex_path ="""^.*"\w+\s+([^\s]+)\s+HTTP.*"""".r
     val reg_ex_status ="""^.*"\s+([^\s]+)""".r
     val reg_ex_content_size ="""^.*\s+(\d+)$""".r
-    
+
     import spark.implicits._
     val df = rdd.map(_._2).flatMap(_.split("\n")).toDF()
 
