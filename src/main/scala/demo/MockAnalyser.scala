@@ -1,18 +1,19 @@
 package demo
 
-import org.apache.spark.sql.SparkSession
+import org.apache.spark.sql.{SparkSession}
 import org.apache.spark.{SparkConf, SparkContext}
 
 /**
-  * Created by bobo on 16/04/18.
+  * Analyse the logs
   */
 object MockAnalyser {
 
+
   def main(args: Array[String]): Unit = {
-    val inputDirPath = "/home/bobo/Downloads/access_log_Aug95"
-    val outputPath = ""
-    val occurence = "10"
-    val conf = new SparkConf().setMaster("local").setAppName("MockAnalyser")
+    val inputDirPath = args(0)
+    val outputPath = args(1)
+    val occurrence = args(2).toInt
+    val conf = new SparkConf()
     val sc = new SparkContext(conf)
     val inputRDDs = sc.wholeTextFiles(inputDirPath)
 
@@ -23,11 +24,11 @@ object MockAnalyser {
 
     val df = MockParser.parse(spark, inputRDDs)
 
-    // For implicit conversions like converting RDDs to DataFrames
+    // execute sql query
     df.createOrReplaceTempView("logs")
-    val sqlQuery = "SELECT source, timestamp, count(*) FROM logs WHERE status == 403 GROUP BY source, timestamp"
-    val resultDF = spark.sql(sqlQuery)
-    resultDF.show(10)
-    
+    val sqlQuery = "SELECT source, timestamp, COUNT(*) as occurrence, 'The source attempted to request too many times in the same second' as message FROM logs GROUP BY source, timestamp HAVING occurrence >= %d ORDER BY occurrence DESC".format(occurrence)
+    val queryDF = spark.sql(sqlQuery).coalesce(1)
+    queryDF.write.json(outputPath)
+
   }
 }
