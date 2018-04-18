@@ -26,9 +26,7 @@ object MockParser {
       .getOrCreate()
     val split_df = parse(spark, log_file)
     
-    if (split_df.count() != 0) {
-      split_df.write.json(outputPath)
-    }
+    split_df.write.json(outputPath)
   }
 
   def parse(spark: SparkSession, rdd: RDD[(String, String)]) = {
