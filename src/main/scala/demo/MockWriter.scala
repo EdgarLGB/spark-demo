@@ -26,7 +26,7 @@ object MockWriter {
     try {
       EsSpark.saveJsonToEs(resultRDD, indexName + "/" + typeName)
     } catch {
-      case _: Throwable => println(_)
+      case e: Throwable => println(e)
     }
   }
 }
