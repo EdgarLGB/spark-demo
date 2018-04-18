@@ -25,7 +25,9 @@ object MockCollector {
 
     // send back the invalid data
     val invalidRDD = flatRDD.filter(!_.matches(regex))
-    invalidRDD.coalesce(1).saveAsTextFile(errorFilePath + "/invalid-" + UUID.randomUUID().toString)
+    if (!flatRDD.isEmpty()) {
+      invalidRDD.coalesce(1).saveAsTextFile(errorFilePath + "/invalid-" + UUID.randomUUID().toString)
+    }
   }
 
 }

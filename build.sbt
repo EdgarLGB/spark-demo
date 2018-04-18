@@ -42,6 +42,7 @@ import sbtassembly.MergeStrategy
 assemblyMergeStrategy in assembly := {
   case PathList("org", "apache", xs@_*) => MergeStrategy.last
   case PathList("com", "google", xs@_*) => MergeStrategy.last
+  case PathList("org", "elasticsearch", xs@_*) => MergeStrategy.last
   case x =>
     val oldStrategy = (assemblyMergeStrategy in assembly).value
     oldStrategy(x)
