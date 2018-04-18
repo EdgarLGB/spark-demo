@@ -1,5 +1,7 @@
 package demo
 
+import java.util.UUID
+
 import org.apache.spark.{SparkConf, SparkContext}
 
 /**
@@ -12,6 +14,7 @@ object MockCollector {
   def main(args: Array[String]): Unit = {
     val inputDirPath = args(0)
     val outputFilePath = args(1)
+    val errorFilePath = args(2)
     val conf = new SparkConf()
     val spark = new SparkContext(conf)
     val inputRDDs = spark.wholeTextFiles(inputDirPath)
@@ -22,7 +25,7 @@ object MockCollector {
 
     // send back the invalid data
     val invalidRDD = flatRDD.filter(!_.matches(regex))
-    invalidRDD.coalesce(1).saveAsTextFile(inputDirPath + "/invalid")
+    invalidRDD.coalesce(1).saveAsTextFile(errorFilePath + "/invalid-" + UUID.randomUUID().toString)
   }
 
 }
