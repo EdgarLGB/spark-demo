@@ -46,6 +46,8 @@ object MockAnalyser {
     val rows = sc.parallelize(messages).map { x => Row(x) }.coalesce(1)
     val messageDF = spark.createDataFrame(rows, StructType(Seq(StructField("message", StringType, false))))
 
-    messageDF.write.json(outputPath)
+    if (messageDF.count() != 0) {
+      messageDF.write.json(outputPath)
+    }
   }
 }

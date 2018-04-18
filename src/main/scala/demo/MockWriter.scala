@@ -20,6 +20,8 @@ object MockWriter {
     val inputRDDs = sc.wholeTextFiles(inputDirPath)
 
     val resultRDD = inputRDDs.map(_._2).flatMap(_.split("\n"))
-    EsSpark.saveJsonToEs(resultRDD, indexName + "/" + typeName)
+    if (!resultRDD.isEmpty()) {
+      EsSpark.saveJsonToEs(resultRDD, indexName + "/" + typeName)
+    }
   }
 }
