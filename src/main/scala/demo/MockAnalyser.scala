@@ -39,7 +39,7 @@ object MockAnalyser {
       val source = r.getString(0)
       val timestamp = r.getString(1)
       val num = r.getLong(2)
-      "Source %s has %d requests in the moment %s".format(source, num, timestamp)
+      "SUSPECT BEHAVIOR : Source %s requested %d times in the same second %s".format(source, num, timestamp)
     }).collect()
 
 
