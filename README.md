@@ -1,8 +1,8 @@
 # spark-demo
-Some spark demo applications
+Spark batch application aiming to analyse the [NASH-HTTP](http://ita.ee.lbl.gov/html/contrib/NASA-HTTP.html) logs.
 
 ## Building project
-$sbt clean assembly
+$ sbt clean assembly
 
 ## Project list
 
